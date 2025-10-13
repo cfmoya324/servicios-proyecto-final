@@ -6,24 +6,24 @@ Vagrant.configure("2") do |config|
         config.vm.define :servidor1 do |servidor1|
 
                 servidor1.vm.box = "bento/ubuntu-22.04"
-                servidor1.vm.network :private_network, ip: "192.168.56.5"
-                servidor1.vm.hostname = "servidor1NGINXBalancer"
+                servidor1.vm.network :private_network, ip: "192.168.56.2"
+                servidor1.vm.hostname = "servidor1Balancer"
                 servidor1.vm.provision "shell", path: "scriptServidor1.sh"
         end
 
         config.vm.define :servidor2 do |servidor2|
 
                 servidor2.vm.box = "bento/ubuntu-22.04"
-                servidor2.vm.network :private_network, ip: "192.168.56.6"
-                servidor2.vm.hostname = "servidor2NGINX"
+                servidor2.vm.network :private_network, ip: "192.168.56.3"
+                servidor2.vm.hostname = "servidor2Apache"
                 servidor2.vm.provision "shell", path: "scriptServidor2.sh"
         end
 
         config.vm.define :servidor3 do |servidor3|
 
                 servidor3.vm.box = "bento/ubuntu-22.04"
-                servidor3.vm.network :private_network, ip: "192.168.56.7"
-                servidor3.vm.hostname = "servidor3NGINX"
+                servidor3.vm.network :private_network, ip: "192.168.56.4"
+                servidor3.vm.hostname = "servidor3Apache"
                 servidor3.vm.provision "shell", path: "scriptServidor3.sh"
         end
 
