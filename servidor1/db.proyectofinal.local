@@ -1,0 +1,17 @@
+;
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@   IN  SOA ns.proyectofinal.local. root.proyectofinal.local. (
+                5       ; Serial
+                60      ; Refresh
+                60      ; Retry
+                60      ; Expire
+            604800 )    ; Negative Cache TTL
+;
+@           IN  NS      ns.proyectofinal.local.
+ns		    IN	A       192.168.56.2
+server2     IN  A       192.168.56.3
+server3     IN  A       192.168.56.4
+server1     IN	CNAME	ns
+www         IN  CNAME   ns
