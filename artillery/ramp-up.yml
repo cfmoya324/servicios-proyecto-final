@@ -1,0 +1,18 @@
+config:
+  target: "http://192.168.56.2"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+    - duration: 120
+      arrivalRate: 20
+    - duration: 60
+      arrivalRate: 50
+  defaults:
+    headers:
+      User-Agent: "Artillery-RampUp"
+scenarios:
+  - name: "Ramp up test"
+    flow:
+      - get:
+          url: "/"
+      - think: 1

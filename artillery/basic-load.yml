@@ -1,0 +1,13 @@
+config:
+  target: "http://192.168.56.2"   # IP del balanceador (server1)
+  phases:
+    - duration: 30                # duración de la prueba en segundos
+      arrivalRate: 10             # solicitudes nuevas por segundo
+  defaults:
+    headers:
+      User-Agent: "Artillery-Basic"
+scenarios:
+  - name: "GET root"
+    flow:
+      - get:
+          url: "/"

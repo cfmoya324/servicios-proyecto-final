@@ -1,0 +1,17 @@
+config:
+  target: "http://192.168.56.2"
+  phases:
+    - duration: 30
+      arrivalRate: 5
+    - duration: 20
+      arrivalRate: 200
+    - duration: 60
+      arrivalRate: 10
+  defaults:
+    headers:
+      User-Agent: "Artillery-Spike"
+scenarios:
+  - name: "Spike test"
+    flow:
+      - get:
+          url: "/"
