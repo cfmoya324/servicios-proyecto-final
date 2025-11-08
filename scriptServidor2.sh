@@ -9,6 +9,8 @@ LOCAL_CONF_SRC="${VAGRANT_SHARED_DIR}/servidor2/apache2.conf"
 SITE_CONF_SRC="${VAGRANT_SHARED_DIR}/servidor2/000-servidor2.conf"
 INDEX_SRC="${VAGRANT_SHARED_DIR}/servidor2/index.html"
 HEALTH_SRC="${VAGRANT_SHARED_DIR}/servidor2/health.html"
+API_SRC="${VAGRANT_SHARED_DIR}/servidor2/api"
+DB_SRC="${VAGRANT_SHARED_DIR}/servidor2/db/init.sql"
 BACKUP_DIR="/root/apache2_backup_$(date +%Y%m%d%H%M%S)"
 BALANCER_IP="192.168.56.2"
 
@@ -28,8 +30,11 @@ echo ""
 echo "1) Actualizar paquetes e instalar utilidades"
 echo ""
 
-apt-get update -y
-DEBIAN_FRONTEND=noninteractive apt-get install -y apache2 curl htop tmux
+apt-get update -y #se agregan las dependencias de fastapi y de mysql
+DEBIAN_FRONTEND=noninteractive apt-get install -y python3 python3-pip pkg-config default-libmysqlclient-dev build-essential mysql-server
+
+pip install --upgrade pip
+pip install flask mysql-connector-python
 
 echo ""
 echo "2) Backup y parada de Apache"
@@ -77,6 +82,15 @@ sed -i "s|<!--TIMESTAMP-->|$DEPLOY_TIME|" /var/www/html/index.html
 
 chown -R www-data:www-data /var/www/html
 chmod -R 755 /var/www/html
+
+echo ""
+echo "5.1) Configurar API Flask y base de datos"
+echo ""
+
+mkdir -p /var/www/api
+cp -r "${API_SRC}/"* /var/www/api/
+
+mysql -u root < "${DB_SRC}"
 
 echo ""
 echo "6) Probar configuración y reiniciar servicio"
