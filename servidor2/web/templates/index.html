@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Servidor Apache - Nodo Backend</title>
+  <style>
+    body {
+      font-family: Ubuntu, Verdana, Tahoma, Arial, sans-serif;
+      background: linear-gradient(135deg, #0078d7, #00bcd4);
+      color: white;
+      text-align: center;
+      padding: 3rem;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .flex {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      background: rgba(255,255,255,0.1);
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      min-width: 400px;
+      width: 50%;
+      max-width: 750px;
+
+      margin-top: 1rem;
+    }
+    .info p { margin: 0.5rem 0; }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    .form > input {
+      font-size: 1rem;
+      border-radius: 12px;
+      padding: 0.4rem;
+      width: 90%;
+      border: none;
+    }
+    .form > button {
+      font-size: 1rem;
+      border-radius: 12px;
+      padding: 0.5rem;
+      width: 90%;
+      margin-top: 5px;
+      border: none;
+      color: white;
+      background-color: #55bbff;
+      transition: background-color 0.5s ease;
+    }
+    .form > button:hover {
+      color: #55bbff;
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="titulo">Servidor - Nodo Backend</h1>
+
+  <div class="flex">
+    <div class="container info" id="info">
+      <p>Cargando información desde la base de datos...</p>
+    </div>
+
+    <div class="container form">
+      <input type="text" id="phrase" name="phrase" value="" placeholder="Ingresa un mensaje cualquiera..." maxlength="100" /><br>
+      <button type="submit" onClick="handleSubmit()"> GUARDAR </button>
+    </div>
+  </div>
+
+  <footer>
+    Servidor gestionado mediante <code>Flask + MySQL + Apache</code>
+  </footer>
+
+  <script>
+    async function cargarDatos() {
+      try {
+        const res = await fetch('/api/info');
+        const data = await res.json();
+
+        document.getElementById('titulo').textContent = data.servidor + ' - Nodo Backend';
+        document.getElementById('info').innerHTML = `
+          <p><strong>IP:</strong> ${data.ip}</p>
+          <p><strong>Rol:</strong> ${data.rol}</p>
+          <p><strong>Estado:</strong> ${data.estado}</p>
+          <p><strong>Mensaje:</strong> ${data.mensaje}</p>
+          <p><strong>Última actualización:</strong> ${data.fecha_actualizacion}</p>
+        `;
+      } catch (error) {
+        document.getElementById('info').innerHTML = '<p>Error al conectar con la API.</p>';
+        console.error(error);
+      }
+    }
+
+    async function handleSubmit() {
+      var data = {
+        mensaje: document.getElementById('phrase').value
+      };
+      fetch('/api/actualizar_frase', {
+          method: 'PATCH',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+      .then(data => {
+          // Handle success
+          console.log(data);
+      })
+      .catch(error => {
+          // Handle error
+          console.error('Error:', error);
+      });
+      cargarDatos();
+    }
+
+    cargarDatos();
+    setInterval(cargarDatos, 10000);
+  </script>
+</body>
+</html>
