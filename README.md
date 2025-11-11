@@ -24,4 +24,4 @@ Desarrollado por Isabella Castañeda, Andrés Felipe Cardona, Juan David Velasco
 
 ### Imágenes
 
-![cluster funcionando](/screenshots/cluster-funcionando)
+![cluster funcionando](/screenshots/cluster-funcionando.png)
